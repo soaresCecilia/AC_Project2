@@ -58,6 +58,6 @@ hCycles n = do
       t <- filter (\l -> adj(last l, n) && length l == (length allNodes)) [x];
       map (\l -> l ++ [n]) [t] }
 
-hCyclesAux :: Int -> [[Node]] -> [[Node]]
+hCyclesAux :: Int -> [Path] -> [Path]
 hCyclesAux 0 x = x
 hCyclesAux i x = hCyclesAux (i-1) (concatMap (`addtoEnd` allNodes) x)
