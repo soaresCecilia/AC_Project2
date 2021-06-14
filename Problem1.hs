@@ -45,18 +45,15 @@ choice = uncurry (++)
 addtoEnd :: Path -> [Node] -> [Path]
 addtoEnd p ns | null as = [p]
               | otherwise = map (\x -> p ++ [x]) as
-              where as = filter ( `notElem` p) (adjacentNodes (last p) ns) 
-
-
+              where as = filter (`notElem` p) (adjacentNodes (last p) ns) 
 
 -- Computes all Hamiltonian cycles starting from a given node
 -- !! To implement !!
 hCycles :: Node -> [Path]
 hCycles n = do
-    { p <- addtoEnd [n] allNodes;
-      x <- hCyclesAux (length allNodes) [p];
-      t <- filter (\l -> adj(last l, n) && length l == (length allNodes)) [x];
-      map (\l -> l ++ [n]) [t] }
+     { x <- hCyclesAux (length allNodes) [[n]];
+       t <- filter (\l -> adj(last l, n) && length l == (length allNodes)) [x];
+       map (\l -> l ++ [n]) [t] }
 
 hCyclesAux :: Int -> [Path] -> [Path]
 hCyclesAux 0 x = x

@@ -58,21 +58,20 @@ taddToEnd p ns | null as = [p]
 -- .......
 hCyclesCost :: Node -> [Duration Path]
 hCyclesCost n = do
-      p <- taddToEnd (Duration(0,[n])) (tadjacentNodes n allNodes)
-      x <- (hCyclesAuxCost (length allNodes) [p])
+      x <- (hCyclesAuxCost (length allNodes) [(Duration(0,[n]))])
       t <- filter (\l -> adj(last (getValue l), n) && length (getValue l) == (length allNodes)) [x]
-      concat (map (\l ->  taddToEndDummy l  (tadjacentNodes (last (getValue l)) [n])) [t]) 
-      
+      concat (map (\l -> taddToEndDummy l (tadjacentNodes (last (getValue l)) [n]))[t])      
+
+
 
 hCyclesAuxCost :: Int -> [Duration Path] -> [Duration Path]
 hCyclesAuxCost 0 x = x
 hCyclesAuxCost i x = hCyclesAuxCost (i-1) (concatMap (`taddToEnd` all) x)
-                   where all = map (\y -> Duration(0, y)) allNodes
-
+                     where all = map (\y -> Duration(0, y)) allNodes
 
 taddToEndDummy :: Duration Path -> [Duration Node] -> [Duration Path]
 taddToEndDummy p ns | null ns = [p]
-               | otherwise = map (\x -> Duration(getDuration x + getDuration p,  (getValue p) ++ [(getValue x)]) ) ns
+                    | otherwise = map (\x -> Duration(getDuration x + getDuration p,  (getValue p) ++ [(getValue x)]) ) ns
 
 
 
