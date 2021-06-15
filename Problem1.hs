@@ -6,8 +6,8 @@ data Node = A | B | C | D | E | F deriving (Show,Eq,Ord)
 adj :: (Node,Node) -> Bool
 adj p = case p of
   (A,B) -> True
-  (A,C) -> True  
-  (A,F) -> True 
+  (A,C) -> True
+  (A,F) -> True
   (B,A) -> True
   (B,C) -> True
   (B,E) -> True
@@ -29,7 +29,7 @@ type Path = [Node]
 
 -- 2. Auxiliary functions
 adjacentNodes :: Node -> [Node] -> [Node]
-adjacentNodes n ns = filter (\x -> adj(n,x)) ns
+adjacentNodes n = filter (\x -> adj(n,x))
 
 allNodes :: [Node]
 allNodes = [A,B,C,D,E,F]
@@ -41,19 +41,19 @@ choice = uncurry (++)
 {- For each node a in ns, if a is not already in p the function
    creates a new path by adding to the end of p the element a.
 -}
--- !! To implement !!
 addtoEnd :: Path -> [Node] -> [Path]
 addtoEnd p ns | null as = [p]
               | otherwise = map (\x -> p ++ [x]) as
-              where as = filter (`notElem` p) (adjacentNodes (last p) ns) 
+              where as = filter ( `notElem` p) (adjacentNodes (last p) ns)
 
--- Computes all Hamiltonian cycles starting from a given node
--- !! To implement !!
+
+
+-- Computes all Hamiltonian cycles starting from a given node.
 hCycles :: Node -> [Path]
-hCycles n = do
-     { x <- hCyclesAux (length allNodes) [[n]];
-       t <- filter (\l -> adj(last l, n) && length l == (length allNodes)) [x];
-       map (\l -> l ++ [n]) [t] }
+hCycles n = map (\l -> l ++ [n]) t
+          where x = hCyclesAux (length allNodes) [[n]]
+                t = filter (\l -> adj(last l, n) && length l == length allNodes) x
+
 
 hCyclesAux :: Int -> [Path] -> [Path]
 hCyclesAux 0 x = x
